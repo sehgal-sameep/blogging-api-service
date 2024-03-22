@@ -1,8 +1,10 @@
 package com.codewithsam.blog.controllers;
 
+import com.codewithsam.blog.config.AppConstants;
 import com.codewithsam.blog.entities.Post;
 import com.codewithsam.blog.payloads.ApiResponse;
 import com.codewithsam.blog.payloads.PostDto;
+import com.codewithsam.blog.payloads.PostResponse;
 import com.codewithsam.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,21 +65,24 @@ public class PostController {
     }
 
     @GetMapping("posts/{postId}")
-    public ResponseEntity<PostDto> getPost( @PathVariable Integer postId)
-    {
+    public ResponseEntity<PostDto> getPost(@PathVariable Integer postId) {
         PostDto post = this.postService.getPost(postId);
-        return new ResponseEntity<PostDto>(post,HttpStatus.OK);
+        return new ResponseEntity<PostDto>(post, HttpStatus.OK);
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts()
-    {
-        List<PostDto> posts = this.postService.getAllPosts();
-        return new ResponseEntity<List<PostDto>>(posts,HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER) Integer pageNumber,
+                                                    @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE) Integer pageSize,
+                                                    @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY) String sortBy) {
+        PostResponse postResponse = this.postService.getAllPosts(pageNumber, pageSize, sortBy);
+        return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
     }
 
-
-
+    @GetMapping("posts/search/{keywords}")
+    public ResponseEntity<List<PostDto>> searchPosts(@PathVariable String keywords) {
+        List<PostDto> postDtos = this.postService.searchPosts(keywords);
+        return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+    }
 
 
 }

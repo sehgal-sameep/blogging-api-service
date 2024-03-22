@@ -1,8 +1,11 @@
 package com.codewithsam.blog.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
+import com.codewithsam.blog.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,25 +45,29 @@ public class UserController {
 		UserDto updatedUser= this.userService.updateUser(userDto, userId);
 		return ResponseEntity.ok(updatedUser);
 	}
+
 	//DELETE- delete user
 	@DeleteMapping("/{userId}")
-	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId)
-	{
+	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId) {
 		this.userService.deleteUsers(userId);
-		return new ResponseEntity<ApiResponse>(new ApiResponse("User deleted successfully",true),HttpStatus.OK);
+		return new ResponseEntity<ApiResponse>(new ApiResponse("User deleted successfully", true), HttpStatus.OK);
 	}
-	
+
 	//GET- get user
 	@GetMapping("/")
-	public ResponseEntity<List<UserDto>> getAllUsers()
-	{
+	public ResponseEntity<List<UserDto>> getAllUsers() {
 		return ResponseEntity.ok(this.userService.getAllUsers());
 	}
-	
+
 	@GetMapping("/{userId}")
-	public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId)
-	{
+	public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId) {
 		return ResponseEntity.ok(this.userService.getUserById(userId));
 	}
+
+	@GetMapping("/current-user")
+	public String getLoggedInUser(Principal principal) {
+		return principal.getName();
+	}
+
 
 }

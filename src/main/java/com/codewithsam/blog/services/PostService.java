@@ -4,6 +4,7 @@ import com.codewithsam.blog.entities.Category;
 import com.codewithsam.blog.entities.Post;
 import com.codewithsam.blog.entities.User;
 import com.codewithsam.blog.payloads.PostDto;
+import com.codewithsam.blog.payloads.PostResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface PostService {
     void deletePost(Integer postId);
 
     //getAllPosts
-    List<PostDto> getAllPosts();
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy);
 
     //getSinglePost
     PostDto getPost(Integer postId);
@@ -31,5 +32,7 @@ public interface PostService {
 
     //getPostByUser
     List<PostDto> getPostsByUser(Integer userId);
+
+    List<PostDto> searchPosts(String keyword);
 
 }

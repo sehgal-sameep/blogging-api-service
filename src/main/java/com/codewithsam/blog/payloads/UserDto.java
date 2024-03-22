@@ -23,7 +23,7 @@ public class UserDto {
 	private String name;
 	
 	@NotEmpty
-	@Size(min=3, max=10, message= "Password must be of size 3-10")
+//	@Size(min=3, message= "Password must be greater than size 3")
 	private String password;
 	
 	@Email

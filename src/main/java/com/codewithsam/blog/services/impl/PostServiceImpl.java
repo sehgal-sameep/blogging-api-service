@@ -6,12 +6,17 @@ import com.codewithsam.blog.entities.User;
 import com.codewithsam.blog.exceptions.ResourceNotFoundException;
 import com.codewithsam.blog.payloads.CategoryDto;
 import com.codewithsam.blog.payloads.PostDto;
+import com.codewithsam.blog.payloads.PostResponse;
 import com.codewithsam.blog.repositories.CategoryRepo;
 import com.codewithsam.blog.repositories.PostRepo;
 import com.codewithsam.blog.repositories.UserRepo;
 import com.codewithsam.blog.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -67,10 +72,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> posts = this.postRepo.findAll();
-        List<PostDto> postDtos = posts.stream().map((post)-> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
-        return postDtos;
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy) {
+        Pageable p = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
+        Page<Post> pagedPost = this.postRepo.findAll(p);
+        List<Post> posts = pagedPost.getContent();
+
+        List<PostDto> postDtos = posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pagedPost.getNumber());
+        postResponse.setPageSize(pagedPost.getSize());
+        postResponse.setTotalElements(pagedPost.getNumberOfElements());
+        postResponse.setTotalPages(pagedPost.getTotalPages());
+        postResponse.setLastPage(pagedPost.isLast());
+        return postResponse;
     }
 
     @Override
@@ -91,9 +107,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getPostsByUser(Integer userId) {
-        User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId));
-        List <Post> posts = this.postRepo.findByUser(user);
-        List<PostDto> postDtos = posts.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
+        User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "UserId", userId));
+        List<Post> posts = this.postRepo.findByUser(user);
+        List<PostDto> postDtos = posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return postDtos;
+    }
+
+    @Override
+    public List<PostDto> searchPosts(String keyword) {
+        List<Post> posts = this.postRepo.findBypostTitleContaining(keyword);
+        List<PostDto> postDtos = posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
         return postDtos;
     }
 }
