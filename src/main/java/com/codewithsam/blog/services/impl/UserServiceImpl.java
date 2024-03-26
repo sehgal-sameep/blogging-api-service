@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.codewithsam.blog.entities.User;
@@ -16,18 +17,24 @@ import com.codewithsam.blog.exceptions.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserRepo userRepo;
-	
-	@Autowired
-	private ModelMapper modelMapper;
-	
-	@Override
-	public UserDto createUser(UserDto userDto) {
-		User user= this.dtoToUser(userDto);
-		User savedUser= this.userRepo.save(user);
-		return this.userToDto(savedUser);
-	}
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDto createUser(UserDto userDto) {
+        User user = this.dtoToUser(userDto);
+        String pword = user.getPassword();
+        String encodedPassword = this.passwordEncoder.encode(pword);
+        user.setPassword(encodedPassword);
+        User savedUser = this.userRepo.save(user);
+        return this.userToDto(savedUser);
+    }
 
 	@Override
 	public UserDto updateUser(UserDto userDto, Integer userId) {
@@ -36,8 +43,8 @@ public class UserServiceImpl implements UserService {
 		
 		user.setAbout(userDto.getAbout());
 		user.setEmail(userDto.getEmail());
-		user.setName(userDto.getName());
-		user.setPassword(userDto.getPassword());
+        user.setName(userDto.getName());
+        user.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
 		User updatedUser=this.userRepo.save(user);
 		UserDto updatedUserDto=this.userToDto(updatedUser);
 		return updatedUserDto;
