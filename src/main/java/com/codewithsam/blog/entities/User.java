@@ -77,4 +77,7 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
+//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//	private Set<Comment> comments = new HashSet<>();
 }
