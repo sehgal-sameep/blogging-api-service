@@ -48,20 +48,20 @@ public class PostController {
 
     //update
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> updatePost( @RequestBody PostDto postDto,
-                                               @PathVariable Integer postId)
-    {
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,
+                                              @PathVariable Integer postId) {
         PostDto post = this.postService.updatePost(postDto, postId);
-        return new ResponseEntity<PostDto>(post,HttpStatus.OK);
+        return new ResponseEntity<PostDto>(post, HttpStatus.OK);
     }
+
+    //TODO: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
 
 
     //delete
     @DeleteMapping("posts/{postId}")
-    public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId)
-    {
+    public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId) {
         this.postService.deletePost(postId);
-        return new ResponseEntity<ApiResponse>(new ApiResponse("post deleted successfully",true),HttpStatus.OK);
+        return new ResponseEntity<ApiResponse>(new ApiResponse("post deleted successfully", true), HttpStatus.OK);
     }
 
 
