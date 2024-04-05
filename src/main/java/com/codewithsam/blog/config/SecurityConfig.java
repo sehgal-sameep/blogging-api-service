@@ -114,6 +114,8 @@ public class SecurityConfig {
 //                                .requestMatchers("/home/**")
 //                        .hasRole("ADMIN")
 //                        .authenticated()
+                                .requestMatchers("/api/user/")
+                                .permitAll()
                                 .requestMatchers("/apis/v1/auth/login")
                                 .permitAll()
                                 .anyRequest()

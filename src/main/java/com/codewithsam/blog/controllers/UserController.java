@@ -24,14 +24,14 @@ import com.codewithsam.blog.services.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
 	//POST- create user
-	@PostMapping("/")
+	@PostMapping("/user/")
 	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto)
 	{
 		UserDto createdUserDto= this.userService.createUser(userDto);
@@ -39,7 +39,7 @@ public class UserController {
 	}
 	
 	//PUT- update user
-	@PutMapping("/{userId}")
+	@PutMapping("/users/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId)
 	{
 		UserDto updatedUser= this.userService.updateUser(userDto, userId);
@@ -47,24 +47,24 @@ public class UserController {
 	}
 
 	//DELETE- delete user
-	@DeleteMapping("/{userId}")
+	@DeleteMapping("/users/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId) {
 		this.userService.deleteUsers(userId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("User deleted successfully", true), HttpStatus.OK);
 	}
 
 	//GET- get user
-	@GetMapping("/")
+	@GetMapping("/users/")
 	public ResponseEntity<List<UserDto>> getAllUsers() {
 		return ResponseEntity.ok(this.userService.getAllUsers());
 	}
 
-	@GetMapping("/{userId}")
+	@GetMapping("/users/{userId}")
 	public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId) {
 		return ResponseEntity.ok(this.userService.getUserById(userId));
 	}
 
-	@GetMapping("/current-user")
+	@GetMapping("/users/current-user")
 	public String getLoggedInUser(Principal principal) {
 		return principal.getName();
 	}
