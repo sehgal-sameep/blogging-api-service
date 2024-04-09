@@ -75,26 +75,35 @@ package com.codewithsam.blog.config;
 import com.codewithsam.blog.security.CustomUserDetailService;
 import com.codewithsam.blog.security.JwtAuthenticationEntryPoint;
 import com.codewithsam.blog.security.JwtAuthenticationFilter;
+
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer.*;
-//import org.springframework.security.config.annotation.web.configurers.HttpSecurity.*;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
 
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 public class SecurityConfig {
 
     @Autowired
@@ -114,10 +123,13 @@ public class SecurityConfig {
 //                                .requestMatchers("/home/**")
 //                        .hasRole("ADMIN")
 //                        .authenticated()
-                                .requestMatchers("/api/user/")
-                                .permitAll()
-                                .requestMatchers("/apis/v1/auth/login")
-                                .permitAll()
+//
+                                .requestMatchers("/swagger-resources/**", "/webjars/**", "/v3/api-docs/**", "/v2/api-docs",
+                                        "/api-docs", "/swagger/**", "/v3/**", "/api/user/", "/swagger-ui/**",
+                                        "/swagger-ui**", "/configuration/**",
+                                        "/favicon.ico/**", "/favicon.ico",
+                                        "/*.png", "/*.gif", "/*.svg", "/*.jpg", "/*.html", "/*.css", "/*.js").permitAll()
+                                .requestMatchers("/apis/v1/auth/login").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -134,7 +146,6 @@ public class SecurityConfig {
 
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {

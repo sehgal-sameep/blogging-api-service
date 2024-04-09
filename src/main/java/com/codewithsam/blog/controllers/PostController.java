@@ -55,8 +55,6 @@ public class PostController {
     }
 
 
-    //TODO:testing
-
 
     //delete
     @DeleteMapping("posts/{postId}")
