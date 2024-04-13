@@ -22,11 +22,11 @@ import io.swagger.v3.oas.annotations.servers.Server;
         ),
         servers = {
                 @Server(
-                        description = "DEV ENV",
-                        url = "http://localhost:9090"
+                        description = "PROD ENV",
+                        url = "http://blogging.ap-southeast-2.elasticbeanstalk.com"
                 ),
                 @Server(
-                        description = "PROD ENV",
+                        description = "DEV ENV",
                         url = "http://localhost:9090"
                 )
         },

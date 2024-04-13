@@ -44,9 +44,7 @@ public class AuthController {
 
         JwtAuthResponse response = new JwtAuthResponse();
         response.setJwtToken(token);
-//        JwtAuthResponse response = JwtAuthResponse.builder()
-//                .jwtToken(token)
-//                .username(userDetails.getUsername()).build();
+        response.setUsername(userDetails.getUsername());
         return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
     }
 
