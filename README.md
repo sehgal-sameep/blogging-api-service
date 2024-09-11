@@ -35,16 +35,7 @@ How to clone your project
 git clone https://github.com/sehgal-sameep/blogging-api-service.git
 ```
 
-<h2 id="technologies">💻 API-EndPoints </h2>
-![auth-controller](images/auth-controller.png)
-![user-controller](images/user-controller.png)
-![post-controller](images/post-controller.png)
-![category-controller](images/category-controller.png)
-![comment-controller](images/comment-controller.png)
 
-
-<h2 id="er-diagram">💻 ER-Diagram </h2>
-![ER-Diagram](images/er_diag_blogging_service.jpeg)
 
 
 <h2 id="documentations">💻 Documentations that might help </h2>
